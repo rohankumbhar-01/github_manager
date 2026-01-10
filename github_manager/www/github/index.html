@@ -1,0 +1,404 @@
+{% extends "templates/web.html" %}
+
+{% block title %}{{ _("GitHub Manager") }}{% endblock %}
+
+{% block page_content %}
+<div id="github-dashboard" class="github-manager-dashboard">
+	<!-- Dashboard will be rendered by JavaScript -->
+	<div class="loading-state text-center" style="padding: 100px 0;">
+		<i class="fa fa-spinner fa-spin fa-3x"></i>
+		<p class="text-muted mt-3">Loading GitHub Dashboard...</p>
+	</div>
+</div>
+
+<style>
+.github-manager-dashboard {
+	padding: 20px;
+	background: #f5f7fa;
+	min-height: 100vh;
+}
+
+.github-stats-card {
+	background: white;
+	border-radius: 8px;
+	padding: 20px;
+	margin-bottom: 20px;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.stat-number {
+	font-size: 32px;
+	font-weight: bold;
+	color: #2e3192;
+}
+
+.stat-label {
+	color: #6c757d;
+	font-size: 14px;
+	margin-top: 5px;
+}
+
+.github-section-title {
+	font-size: 20px;
+	font-weight: 600;
+	margin-bottom: 15px;
+	color: #1a1a1a;
+}
+
+.github-action-btn {
+	margin-right: 10px;
+	margin-bottom: 10px;
+}
+
+.github-table {
+	background: white;
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+.github-badge {
+	display: inline-block;
+	padding: 4px 8px;
+	border-radius: 4px;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.badge-open {
+	background: #28a745;
+	color: white;
+}
+
+.badge-closed {
+	background: #dc3545;
+	color: white;
+}
+
+.badge-merged {
+	background: #6f42c1;
+	color: white;
+}
+
+.loading-state {
+	min-height: 300px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+</style>
+
+<script>
+frappe.ready(function() {
+	// Initialize GitHub Dashboard
+	new GitHubDashboard();
+});
+
+class GitHubDashboard {
+	constructor() {
+		this.container = document.getElementById('github-dashboard');
+		this.init();
+	}
+
+	async init() {
+		await this.loadStats();
+		this.render();
+	}
+
+	async loadStats() {
+		// Load repository stats
+		this.repoStats = await frappe.call({
+			method: 'github_manager.github_manager.github.repository.get_repository_stats',
+			args: {}
+		}).then(r => r.message);
+
+		// Load PR stats
+		this.prStats = await frappe.call({
+			method: 'github_manager.github_manager.github.pull_request.get_pull_request_stats',
+			args: {}
+		}).then(r => r.message);
+
+		// Load release stats
+		this.releaseStats = await frappe.call({
+			method: 'github_manager.github_manager.github.release.get_release_stats',
+			args: {}
+		}).then(r => r.message);
+
+		// Load issue stats
+		this.issueStats = await frappe.call({
+			method: 'github_manager.github_manager.github.issue.get_issue_stats',
+			args: {}
+		}).then(r => r.message);
+	}
+
+	render() {
+		this.container.innerHTML = `
+			<div class="row">
+				<div class="col-12">
+					<h1 style="margin-bottom: 20px;">
+						<i class="fa fa-github"></i> GitHub Manager Dashboard
+					</h1>
+				</div>
+			</div>
+
+			<!-- Action Buttons -->
+			<div class="row">
+				<div class="col-12" style="margin-bottom: 20px;">
+					<button class="btn btn-primary github-action-btn" onclick="githubDashboard.syncRepositories()">
+						<i class="fa fa-refresh"></i> Sync Repositories
+					</button>
+					<button class="btn btn-success github-action-btn" onclick="githubDashboard.createRepository()">
+						<i class="fa fa-plus"></i> Create Repository
+					</button>
+					<button class="btn btn-info github-action-btn" onclick="githubDashboard.viewSettings()">
+						<i class="fa fa-cog"></i> Settings
+					</button>
+				</div>
+			</div>
+
+			<!-- Stats Cards -->
+			<div class="row">
+				<div class="col-md-3">
+					${this.renderStatCard('Repositories', this.repoStats.total_repos, 'fa-database', '#2e3192')}
+				</div>
+				<div class="col-md-3">
+					${this.renderStatCard('Open PRs', this.prStats.open_prs, 'fa-code-fork', '#28a745')}
+				</div>
+				<div class="col-md-3">
+					${this.renderStatCard('Open Issues', this.issueStats.open_issues, 'fa-exclamation-circle', '#dc3545')}
+				</div>
+				<div class="col-md-3">
+					${this.renderStatCard('Releases', this.releaseStats.total_releases, 'fa-tag', '#6f42c1')}
+				</div>
+			</div>
+
+			<!-- Recent Activity -->
+			<div class="row" style="margin-top: 30px;">
+				<div class="col-md-6">
+					${this.renderRecentPRs()}
+				</div>
+				<div class="col-md-6">
+					${this.renderRecentRepos()}
+				</div>
+			</div>
+
+			<!-- Additional Stats -->
+			<div class="row" style="margin-top: 30px;">
+				<div class="col-md-6">
+					${this.renderRecentIssues()}
+				</div>
+				<div class="col-md-6">
+					${this.renderRecentReleases()}
+				</div>
+			</div>
+		`;
+
+		// Store reference for global access
+		window.githubDashboard = this;
+	}
+
+	renderStatCard(label, value, icon, color) {
+		return `
+			<div class="github-stats-card">
+				<div style="display: flex; align-items: center; justify-content: space-between;">
+					<div>
+						<div class="stat-number" style="color: ${color};">${value || 0}</div>
+						<div class="stat-label">${label}</div>
+					</div>
+					<i class="fa ${icon} fa-3x" style="color: ${color}; opacity: 0.3;"></i>
+				</div>
+			</div>
+		`;
+	}
+
+	renderRecentPRs() {
+		const prs = this.prStats.recent_prs || [];
+		let rows = '';
+
+		prs.slice(0, 5).forEach(pr => {
+			const stateClass = pr.state === 'open' ? 'badge-open' :
+							  pr.state === 'merged' ? 'badge-merged' : 'badge-closed';
+			rows += `
+				<tr style="cursor: pointer;" onclick="frappe.set_route('Form', 'GitHub Pull Request', '${pr.name}')">
+					<td>${pr.title}</td>
+					<td><span class="github-badge ${stateClass}">${pr.state.toUpperCase()}</span></td>
+				</tr>
+			`;
+		});
+
+		return `
+			<div class="github-stats-card">
+				<div class="github-section-title">Recent Pull Requests</div>
+				<table class="table table-hover" style="margin-bottom: 0;">
+					<thead>
+						<tr>
+							<th>Title</th>
+							<th>Status</th>
+						</tr>
+					</thead>
+					<tbody>
+						${rows || '<tr><td colspan="2" class="text-muted">No pull requests found</td></tr>'}
+					</tbody>
+				</table>
+			</div>
+		`;
+	}
+
+	renderRecentRepos() {
+		const repos = this.repoStats.recent_repos || [];
+		let rows = '';
+
+		repos.slice(0, 5).forEach(repo => {
+			rows += `
+				<tr style="cursor: pointer;" onclick="frappe.set_route('Form', 'GitHub Repository', '${repo.name}')">
+					<td>${repo.repository_name}</td>
+					<td>${repo.language || 'N/A'}</td>
+					<td><i class="fa fa-star"></i> ${repo.stars || 0}</td>
+				</tr>
+			`;
+		});
+
+		return `
+			<div class="github-stats-card">
+				<div class="github-section-title">Recent Repositories</div>
+				<table class="table table-hover" style="margin-bottom: 0;">
+					<thead>
+						<tr>
+							<th>Repository</th>
+							<th>Language</th>
+							<th>Stars</th>
+						</tr>
+					</thead>
+					<tbody>
+						${rows || '<tr><td colspan="3" class="text-muted">No repositories found</td></tr>'}
+					</tbody>
+				</table>
+			</div>
+		`;
+	}
+
+	renderRecentIssues() {
+		const issues = this.issueStats.recent_issues || [];
+		let rows = '';
+
+		issues.slice(0, 5).forEach(issue => {
+			const stateClass = issue.state === 'open' ? 'badge-open' : 'badge-closed';
+			rows += `
+				<tr style="cursor: pointer;" onclick="frappe.set_route('Form', 'GitHub Issue', '${issue.name}')">
+					<td>${issue.title}</td>
+					<td><span class="github-badge ${stateClass}">${issue.state.toUpperCase()}</span></td>
+				</tr>
+			`;
+		});
+
+		return `
+			<div class="github-stats-card">
+				<div class="github-section-title">Recent Issues</div>
+				<table class="table table-hover" style="margin-bottom: 0;">
+					<thead>
+						<tr>
+							<th>Title</th>
+							<th>Status</th>
+						</tr>
+					</thead>
+					<tbody>
+						${rows || '<tr><td colspan="2" class="text-muted">No issues found</td></tr>'}
+					</tbody>
+				</table>
+			</div>
+		`;
+	}
+
+	renderRecentReleases() {
+		const releases = this.releaseStats.recent_releases || [];
+		let rows = '';
+
+		releases.slice(0, 5).forEach(release => {
+			rows += `
+				<tr style="cursor: pointer;" onclick="frappe.set_route('Form', 'GitHub Release', '${release.name}')">
+					<td>${release.name_title || release.tag_name}</td>
+					<td>${release.tag_name}</td>
+				</tr>
+			`;
+		});
+
+		return `
+			<div class="github-stats-card">
+				<div class="github-section-title">Recent Releases</div>
+				<table class="table table-hover" style="margin-bottom: 0;">
+					<thead>
+						<tr>
+							<th>Release Name</th>
+							<th>Tag</th>
+						</tr>
+					</thead>
+					<tbody>
+						${rows || '<tr><td colspan="2" class="text-muted">No releases found</td></tr>'}
+					</tbody>
+				</table>
+			</div>
+		`;
+	}
+
+	syncRepositories() {
+		frappe.call({
+			method: 'github_manager.github_manager.github.background_jobs.enqueue_sync_all_repositories',
+			callback: (r) => {
+				frappe.show_alert({
+					message: 'Repository sync started',
+					indicator: 'green'
+				});
+			}
+		});
+	}
+
+	createRepository() {
+		const dialog = new frappe.ui.Dialog({
+			title: 'Create Repository',
+			fields: [
+				{
+					fieldname: 'name',
+					fieldtype: 'Data',
+					label: 'Repository Name',
+					reqd: 1
+				},
+				{
+					fieldname: 'description',
+					fieldtype: 'Small Text',
+					label: 'Description'
+				},
+				{
+					fieldname: 'is_private',
+					fieldtype: 'Check',
+					label: 'Private Repository',
+					default: 1
+				},
+				{
+					fieldname: 'organization',
+					fieldtype: 'Link',
+					label: 'Organization (Optional)',
+					options: 'GitHub Organization'
+				}
+			],
+			primary_action_label: 'Create',
+			primary_action: (values) => {
+				frappe.call({
+					method: 'github_manager.github_manager.github.repository.create_repository',
+					args: values,
+					callback: (r) => {
+						dialog.hide();
+						this.init();
+					}
+				});
+			}
+		});
+
+		dialog.show();
+	}
+
+	viewSettings() {
+		frappe.set_route('List', 'GitHub App Settings');
+	}
+}
+</script>
+{% endblock %}

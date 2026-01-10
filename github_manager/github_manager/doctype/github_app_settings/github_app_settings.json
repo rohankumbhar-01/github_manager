@@ -1,0 +1,135 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:app_name",
+ "creation": "2026-01-10 13:40:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "app_name",
+  "section_break_2",
+  "app_id",
+  "installation_id",
+  "column_break_5",
+  "private_key",
+  "webhook_secret",
+  "section_break_8",
+  "is_active",
+  "last_token_refresh",
+  "column_break_11",
+  "rate_limit_remaining",
+  "rate_limit_reset_at"
+ ],
+ "fields": [
+  {
+   "fieldname": "app_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "App Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "section_break_2",
+   "fieldtype": "Section Break",
+   "label": "GitHub App Credentials"
+  },
+  {
+   "fieldname": "app_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "App ID",
+   "reqd": 1
+  },
+  {
+   "fieldname": "installation_id",
+   "fieldtype": "Data",
+   "label": "Installation ID",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_5",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "private_key",
+   "fieldtype": "Password",
+   "label": "Private Key (PEM Format)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "webhook_secret",
+   "fieldtype": "Password",
+   "label": "Webhook Secret"
+  },
+  {
+   "fieldname": "section_break_8",
+   "fieldtype": "Section Break",
+   "label": "Status & Rate Limiting"
+  },
+  {
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "default": 1,
+   "label": "Is Active"
+  },
+  {
+   "fieldname": "last_token_refresh",
+   "fieldtype": "Datetime",
+   "label": "Last Token Refresh",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_11",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rate_limit_remaining",
+   "fieldtype": "Int",
+   "label": "Rate Limit Remaining",
+   "read_only": 1
+  },
+  {
+   "fieldname": "rate_limit_reset_at",
+   "fieldtype": "Datetime",
+   "label": "Rate Limit Reset At",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 0,
+ "links": [],
+ "modified": "2026-01-10 13:40:00.000000",
+ "modified_by": "Administrator",
+ "module": "GitHub Manager",
+ "name": "GitHub App Settings",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "GitHub Admin",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "GitHub Viewer",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

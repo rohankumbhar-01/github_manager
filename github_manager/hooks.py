@@ -2,7 +2,7 @@ app_name = "github_manager"
 app_title = "GitHub Manager"
 app_publisher = "Dexciss Technology"
 app_description = "Manage GitHub operations directly from Frappe ERP"
-app_email = "rohan@dexciss.com"
+app_email = "rohan@dexciss.io"
 app_license = "mit"
 
 # Apps
@@ -83,7 +83,7 @@ app_license = "mit"
 # ------------
 
 # before_install = "github_manager.install.before_install"
-# after_install = "github_manager.install.after_install"
+after_install = "github_manager.install.after_install"
 
 # Uninstallation
 # ------------
@@ -148,23 +148,14 @@ app_license = "mit"
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"github_manager.tasks.all"
-# 	],
-# 	"daily": [
-# 		"github_manager.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"github_manager.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"github_manager.tasks.weekly"
-# 	],
-# 	"monthly": [
-# 		"github_manager.tasks.monthly"
-# 	],
-# }
+scheduler_events = {
+	"hourly": [
+		"github_manager.github.background_jobs.scheduled_sync_open_prs"
+	],
+	"daily": [
+		"github_manager.github.background_jobs.scheduled_sync_repositories"
+	],
+}
 
 # Testing
 # -------

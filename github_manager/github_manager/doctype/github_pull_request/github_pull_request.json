@@ -1,0 +1,281 @@
+{
+ "actions": [],
+ "autoname": "format:PR-{repository}-{pr_number}",
+ "creation": "2026-01-10 13:55:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "repository",
+  "pr_number",
+  "pr_id",
+  "column_break_4",
+  "title",
+  "state",
+  "section_break_7",
+  "body",
+  "url",
+  "column_break_10",
+  "head_branch",
+  "base_branch",
+  "section_break_13",
+  "author",
+  "created_at",
+  "updated_at",
+  "column_break_17",
+  "merged",
+  "merged_at",
+  "merged_by",
+  "section_break_21",
+  "comments",
+  "commits",
+  "additions",
+  "deletions",
+  "column_break_26",
+  "mergeable",
+  "mergeable_state",
+  "draft",
+  "section_break_30",
+  "is_synced",
+  "last_synced"
+ ],
+ "fields": [
+  {
+   "fieldname": "repository",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Repository",
+   "options": "GitHub Repository",
+   "reqd": 1
+  },
+  {
+   "fieldname": "pr_number",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "PR Number",
+   "reqd": 1
+  },
+  {
+   "fieldname": "pr_id",
+   "fieldtype": "Data",
+   "label": "GitHub PR ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Title",
+   "reqd": 1
+  },
+  {
+   "fieldname": "state",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "State",
+   "options": "open\nclosed\nmerged",
+   "default": "open"
+  },
+  {
+   "fieldname": "section_break_7",
+   "fieldtype": "Section Break",
+   "label": "PR Details"
+  },
+  {
+   "fieldname": "body",
+   "fieldtype": "Text Editor",
+   "label": "Description"
+  },
+  {
+   "fieldname": "url",
+   "fieldtype": "Data",
+   "label": "GitHub URL",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_10",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "head_branch",
+   "fieldtype": "Data",
+   "label": "Head Branch (Source)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "base_branch",
+   "fieldtype": "Data",
+   "label": "Base Branch (Target)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_13",
+   "fieldtype": "Section Break",
+   "label": "Author & Dates"
+  },
+  {
+   "fieldname": "author",
+   "fieldtype": "Data",
+   "label": "Author",
+   "read_only": 1
+  },
+  {
+   "fieldname": "created_at",
+   "fieldtype": "Datetime",
+   "label": "Created At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "updated_at",
+   "fieldtype": "Datetime",
+   "label": "Updated At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_17",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "merged",
+   "fieldtype": "Check",
+   "label": "Merged",
+   "default": 0,
+   "read_only": 1
+  },
+  {
+   "fieldname": "merged_at",
+   "fieldtype": "Datetime",
+   "label": "Merged At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "merged_by",
+   "fieldtype": "Data",
+   "label": "Merged By",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_21",
+   "fieldtype": "Section Break",
+   "label": "Statistics"
+  },
+  {
+   "fieldname": "comments",
+   "fieldtype": "Int",
+   "label": "Comments",
+   "read_only": 1,
+   "default": 0
+  },
+  {
+   "fieldname": "commits",
+   "fieldtype": "Int",
+   "label": "Commits",
+   "read_only": 1,
+   "default": 0
+  },
+  {
+   "fieldname": "additions",
+   "fieldtype": "Int",
+   "label": "Additions",
+   "read_only": 1,
+   "default": 0
+  },
+  {
+   "fieldname": "deletions",
+   "fieldtype": "Int",
+   "label": "Deletions",
+   "read_only": 1,
+   "default": 0
+  },
+  {
+   "fieldname": "column_break_26",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "mergeable",
+   "fieldtype": "Check",
+   "label": "Mergeable",
+   "read_only": 1
+  },
+  {
+   "fieldname": "mergeable_state",
+   "fieldtype": "Data",
+   "label": "Mergeable State",
+   "read_only": 1
+  },
+  {
+   "fieldname": "draft",
+   "fieldtype": "Check",
+   "label": "Draft",
+   "default": 0
+  },
+  {
+   "fieldname": "section_break_30",
+   "fieldtype": "Section Break",
+   "label": "Sync Status"
+  },
+  {
+   "fieldname": "is_synced",
+   "fieldtype": "Check",
+   "label": "Is Synced",
+   "default": 0
+  },
+  {
+   "fieldname": "last_synced",
+   "fieldtype": "Datetime",
+   "label": "Last Synced",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-10 13:55:00.000000",
+ "modified_by": "Administrator",
+ "module": "GitHub Manager",
+ "name": "GitHub Pull Request",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "GitHub Admin",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "GitHub Maintainer",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "GitHub Viewer",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "title",
+ "track_changes": 1
+}

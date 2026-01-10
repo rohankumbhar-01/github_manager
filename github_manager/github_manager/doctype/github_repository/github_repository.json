@@ -1,0 +1,260 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:full_name",
+ "creation": "2026-01-10 13:50:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "repository_name",
+  "full_name",
+  "repo_id",
+  "column_break_4",
+  "organization",
+  "owner_type",
+  "section_break_7",
+  "description",
+  "url",
+  "clone_url",
+  "column_break_11",
+  "default_branch",
+  "visibility",
+  "is_private",
+  "section_break_15",
+  "stars",
+  "forks",
+  "open_issues",
+  "column_break_19",
+  "language",
+  "size",
+  "created_at",
+  "section_break_23",
+  "is_synced",
+  "last_synced",
+  "column_break_26",
+  "archived",
+  "disabled"
+ ],
+ "fields": [
+  {
+   "fieldname": "repository_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Repository Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "full_name",
+   "fieldtype": "Data",
+   "label": "Full Name (owner/repo)",
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "repo_id",
+   "fieldtype": "Data",
+   "label": "GitHub Repository ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "organization",
+   "fieldtype": "Link",
+   "label": "Organization",
+   "options": "GitHub Organization"
+  },
+  {
+   "fieldname": "owner_type",
+   "fieldtype": "Select",
+   "label": "Owner Type",
+   "options": "User\nOrganization",
+   "default": "User"
+  },
+  {
+   "fieldname": "section_break_7",
+   "fieldtype": "Section Break",
+   "label": "Repository Details"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "url",
+   "fieldtype": "Data",
+   "label": "GitHub URL",
+   "read_only": 1
+  },
+  {
+   "fieldname": "clone_url",
+   "fieldtype": "Data",
+   "label": "Clone URL",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_11",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "default_branch",
+   "fieldtype": "Data",
+   "label": "Default Branch",
+   "default": "main"
+  },
+  {
+   "fieldname": "visibility",
+   "fieldtype": "Select",
+   "label": "Visibility",
+   "options": "public\nprivate\ninternal",
+   "default": "private"
+  },
+  {
+   "fieldname": "is_private",
+   "fieldtype": "Check",
+   "label": "Is Private",
+   "default": 1
+  },
+  {
+   "fieldname": "section_break_15",
+   "fieldtype": "Section Break",
+   "label": "Statistics"
+  },
+  {
+   "fieldname": "stars",
+   "fieldtype": "Int",
+   "label": "Stars",
+   "read_only": 1,
+   "default": 0
+  },
+  {
+   "fieldname": "forks",
+   "fieldtype": "Int",
+   "label": "Forks",
+   "read_only": 1,
+   "default": 0
+  },
+  {
+   "fieldname": "open_issues",
+   "fieldtype": "Int",
+   "label": "Open Issues",
+   "read_only": 1,
+   "default": 0
+  },
+  {
+   "fieldname": "column_break_19",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "language",
+   "fieldtype": "Data",
+   "label": "Primary Language",
+   "read_only": 1
+  },
+  {
+   "fieldname": "size",
+   "fieldtype": "Int",
+   "label": "Size (KB)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "created_at",
+   "fieldtype": "Datetime",
+   "label": "Created At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_23",
+   "fieldtype": "Section Break",
+   "label": "Sync & Status"
+  },
+  {
+   "fieldname": "is_synced",
+   "fieldtype": "Check",
+   "label": "Is Synced",
+   "default": 0
+  },
+  {
+   "fieldname": "last_synced",
+   "fieldtype": "Datetime",
+   "label": "Last Synced",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_26",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "archived",
+   "fieldtype": "Check",
+   "label": "Archived",
+   "default": 0
+  },
+  {
+   "fieldname": "disabled",
+   "fieldtype": "Check",
+   "label": "Disabled",
+   "default": 0
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [
+  {
+   "link_doctype": "GitHub Pull Request",
+   "link_fieldname": "repository"
+  },
+  {
+   "link_doctype": "GitHub Release",
+   "link_fieldname": "repository"
+  }
+ ],
+ "modified": "2026-01-10 13:50:00.000000",
+ "modified_by": "Administrator",
+ "module": "GitHub Manager",
+ "name": "GitHub Repository",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "GitHub Admin",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "GitHub Maintainer",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "GitHub Viewer",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "repository_name",
+ "track_changes": 1
+}
